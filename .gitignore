@@ -1,0 +1,9 @@
+# Ignorar a pasta do ambiente virtual
+.venv/
+
+# Ignorar a pasta de dados brutos
+dataset/raw/
+
+# Ignorar pastas de cache do Python
+__pycache__/
+*.pyc
