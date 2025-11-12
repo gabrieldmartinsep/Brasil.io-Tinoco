@@ -25,7 +25,7 @@ SILVER_FILENAME = 'gastos_limpos.parquet'
 GOLD_FILENAME = 'gastos_agregados_mensais.parquet'
 
 def ensure_dirs():
-    """Garante que as pastas raw, bronze, silver e gold existam."""
+    # Garante que as pastas raw, bronze, silver e gold existam.
     print("LOG: Verificando e criando a estrutura de pastas...")
     for folder in ['raw', 'bronze', 'silver', 'gold']:
         path = os.path.join(BASE_DIR, folder)
@@ -33,10 +33,7 @@ def ensure_dirs():
     print("LOG: Estrutura de pastas pronta.")
 
 def fetch_and_store_data():
-    """
-    Faz a chamada para a API, iterando pelas páginas, com checkpointing
-    e auto-retry em caso de erro 429. Armazena na camada RAW.
-    """
+    # Faz a chamada para a API, iterando pelas páginas, com checkpointing e auto-retry em caso de erro 429. Armazena na camada RAW.
     
     all_results = []
     filepath = os.path.join(RAW_PATH, RAW_FILENAME)
@@ -135,16 +132,13 @@ def fetch_and_store_data():
 
 
 def transform_to_parquet_and_partition(json_filepath):
-    """
-    Lê o JSON da RAW, transforma em DataFrame, cria colunas de ano/mês
-    e salva o Parquet particionado na camada BRONZE.
-    """
+    # Lê o JSON da RAW, transforma em DataFrame, cria colunas de ano/mês e salva o Parquet particionado na camada BRONZE.
 
     if not json_filepath or not os.path.exists(json_filepath):
         print("LOG: Caminho do arquivo JSON não encontrado ou vazio. Abortando BRONZE.")
         return False
 
-    print(f"\n## 🧱 Etapa BRONZE: Transformação para Parquet e Particionamento ##")
+    print(f"\n## Etapa BRONZE: Transformação para Parquet e Particionamento ##")
     
     try:
         df = pd.read_json(json_filepath) 
@@ -202,7 +196,7 @@ def transform_to_parquet_and_partition(json_filepath):
 
 def process_bronze_to_silver():
     # Lê os dados do BRONZE, aplica Data Wrangling (limpeza e tipagem), executa um teste de qualidade simples e salva na camada SILVER.
-    print("\n## ✨ Etapa SILVER: Refinamento e Qualidade dos Dados (Data Wrangling) ##")
+    print("\n## Etapa SILVER: Refinamento e Qualidade dos Dados (Data Wrangling) ##")
     
     # 1. Carregar os Dados Particionados do Bronze
     try:
@@ -327,7 +321,7 @@ def process_bronze_to_silver():
 
 def process_silver_to_gold():
     #Lê os dados limpos do SILVER, aplica agregação (Transformação em Lote) para criar um artefato de dados de alto valor (produtos de dados) esalva na camada GOLD (Serviço).
-    print("\n## 🏆 Etapa GOLD: Agregação e Criação de Artefatos de Dados (Serving Layer) ##")
+    print("\n## Etapa GOLD: Agregação e Criação de Artefatos de Dados (Serving Layer) ##")
     
     # 1. Carregar os Dados Limpos do Silver
     try:
